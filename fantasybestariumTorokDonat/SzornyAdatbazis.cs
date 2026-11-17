@@ -1,9 +1,6 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
-using System.Text;
 
 namespace fantasybestariumTorokDonat
 {
@@ -13,38 +10,36 @@ namespace fantasybestariumTorokDonat
 
         public SzornyAdatbazis()
         {
-            this.connectionString = "Data Source=.;Initial Catalog=fantasybestariumdb;Integrated Security=True;";
+            this.connectionString = "Server=127.0.0.1;Database=fantasybestariumdb;User Id=root;Password=;";
         }
 
-        public List<Szorny> Feltolt() {
+        public List<Szorny> Feltolt()
+        {
             List<Szorny> szornyek = new List<Szorny>();
-
-            using (SqlConnection connection =
-                       new SqlConnection(connectionString))
-            {
-                SqlCommand command =
-                    new SqlCommand("SELECT * FROM szornyek", connection);
-                connection.Open();
-
-                SqlDataReader reader = command.ExecuteReader();
-
-                while (reader.Read())
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
-                    Szorny szorny = new Szorny(
-                        Convert.ToInt32(reader["id"].ToString()),
-                        reader["Nev"].ToString(),
-                        Convert.ToInt32(reader["VeszelyessegiSzint"].ToString()),
-                        reader["Elohely"].ToString(),
-                        reader["FoGyengeseg"].ToString(),
-                        reader["LeggyakoribbZsakmany"].ToString(),
-                        (Convert.ToInt32(reader["VeszelyesE"].ToString())==1
-                        ));
+                    connection.Open();
 
-                    szornyek.Add(szorny);
+                    using (MySqlCommand command = new MySqlCommand("SELECT * FROM szornyek", connection))
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Szorny szorny = new Szorny(
+                                Convert.ToInt32(reader["id"]),
+                                reader["Nev"].ToString(),
+                                Convert.ToInt32(reader["VeszelyessegiSzint"]),
+                                reader["Elohely"].ToString(),
+                                reader["FoGyengeseg"].ToString(),
+                                reader["LeggyakoribbZsakmany"].ToString(),
+                                Convert.ToInt32(reader["VeszelyesE"]) == 1
+                            );
+
+                            szornyek.Add(szorny);
+                        }
+                    }
                 }
-
-                reader.Close();
-            }
+            
 
             return szornyek;
         }

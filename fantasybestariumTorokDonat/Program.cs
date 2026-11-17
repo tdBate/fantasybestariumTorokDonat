@@ -6,7 +6,8 @@ namespace fantasybestariumTorokDonat
     {
         static void Main(string[] args)
         {
-               
+            SzornyAdatbazis szDb = new SzornyAdatbazis();
+            Szornyelemzo szornyelemzo = new Szornyelemzo(szDb.Feltolt());
         }
     }
 }

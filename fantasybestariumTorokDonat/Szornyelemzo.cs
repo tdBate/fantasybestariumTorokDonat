@@ -8,10 +8,9 @@ namespace fantasybestariumTorokDonat
     {
         private List<Szorny> szornyek = new List<Szorny>();
 
-        public Szornyelemzo()
+        public Szornyelemzo(List<Szorny> szornyek)
         {
-            SzornyAdatbazis szDb = new SzornyAdatbazis();
-            this.szornyek = szDb.Feltolt();
+            this.szornyek = szornyek;
         }
 
         public int OsszesSzornySzama() {
